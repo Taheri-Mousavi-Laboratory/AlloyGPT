@@ -77,5 +77,19 @@ In the following example, we will demonstrate how to train the AlloyGPT model. N
 ```
 
 ### Pretrained models
-Due to the restrictions of [Thermo-Calc EULA](https://thermocalc.com/wp-content/uploads/Documentation/Terms_Conditions/eula.pdf), the trained model will only be made available based on reasonable request. 
+Due to the restrictions of [Thermo-Calc EULA](https://thermocalc.com/wp-content/uploads/Documentation/Terms_Conditions/eula.pdf), the trained model will only be made available based on reasonable request. User tokens will be asked for to access the trained model when running the notebooks listed above.
 
+### Reference
+
+```bibtex
+@paper{BoBenjaminSMohadeseh2025AlloyGPT,
+      title={ AlloyGPT: End-to-end prediction and design of additively manufacturable alloys using an autoregressive language model}, 
+      author={Bo Ni, Benjamin Glaser and S. Mohadeseh Taheri-Mousavi},
+      year={2025},
+      eprint={xxxx.xxxxx},
+      archivePrefix={arXiv},
+      url={https://arxiv.org/abs/xxxx.xxxxx}, 
+}
+```
+
+Our implementation is inspired by the [nanoGPT](https://github.com/karpathy/nanoGPT) repository by [Andrej Karpathy](https://github.com/karpathy).
