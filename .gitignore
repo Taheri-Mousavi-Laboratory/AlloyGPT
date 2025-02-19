@@ -169,3 +169,10 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# +++++++++++++++++++++++++++
+resu/
+training_resu/
+Local_Store/
+AlloyGPT_env/
+
