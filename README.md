@@ -62,7 +62,7 @@ ModeShapeDiffusionDesign/
 
 ### Inference notebook
 
-In the following examples, we will demonstrate how to solve the forward prediction and inverse design tasks with the same trained AlloyGPT model. Note that, you will need the password to access the trained model due to restrictions of [Thermo-Calc EULA](https://thermocalc.com/wp-content/uploads/Documentation/Terms_Conditions/eula.pdf).
+In the following example, we will demonstrate how to solve the forward prediction and inverse design tasks with the same trained AlloyGPT model. Note that, you will need the password to access the trained model due to restrictions of [Thermo-Calc EULA](https://thermocalc.com/wp-content/uploads/Documentation/Terms_Conditions/eula.pdf).
 
 ```
 0_AlloyGPT_Inferring_demo.ipynb
@@ -70,7 +70,7 @@ In the following examples, we will demonstrate how to solve the forward predicti
 
 ### Training notebook
 
-In the following examples, we will demonstrate how to train the AlloyGPT model. Note that, you will need the password to access the dataset due to restrictions of [Thermo-Calc EULA](https://thermocalc.com/wp-content/uploads/Documentation/Terms_Conditions/eula.pdf).
+In the following example, we will demonstrate how to train the AlloyGPT model. Note that, you will need the password to access the dataset due to restrictions of [Thermo-Calc EULA](https://thermocalc.com/wp-content/uploads/Documentation/Terms_Conditions/eula.pdf).
 
 ```
 1_AlloyGPT_training_demo.ipynb 
