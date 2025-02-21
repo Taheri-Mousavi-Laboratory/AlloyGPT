@@ -1,16 +1,22 @@
 # torch==2.2.0+cu121
 # torchvision==0.17.0+cu121
 # torchaudio==2.2.0+cu121
-torch==2.2.0
-torchvision==0.17.0
-torchaudio==2.2.0
+# torch==2.2.0
+# torchvision==0.17.0
+# torchaudio==2.2.0
+torch==2.6.0
+torchvision==0.21.0
+torchaudio==2.6.0
 # 
-datasets==3.3.1
-evaluate==0.4.1
+# datasets==3.3.1
+datasets==3.3.2
+# evaluate==0.4.1
 # transformers==4.41.0.dev0
-transformers==4.41.0
+# transformers==4.41.0
+transformers==4.49.0
 #
-accelerate==0.27.2
+# accelerate==0.27.2
+accelerate==1.4.0
 # causal-conv1d>=1.1.0
 #
 # mamba-ssm

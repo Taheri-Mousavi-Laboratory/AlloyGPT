@@ -17,7 +17,7 @@ Rapid progress in additive manufacturing of alloys opens opportunities in contro
 Create a virtual environment
 
 ```bash
-conda create --prefix=./AlloyGPT_env python=3.10 git jupyter jupyterlab -c anaconda -c conda-forge
+conda env create --prefix=./AlloyGPT_env --file=AlloyGPT_env_environment.yml
 conda activate ./AlloyGPT_env
 
 ```
