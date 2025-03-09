@@ -86,9 +86,9 @@ Due to the restrictions of [Thermo-Calc EULA](https://thermocalc.com/wp-content/
       title={ AlloyGPT: End-to-end prediction and design of additively manufacturable alloys using an autoregressive language model}, 
       author={Bo Ni, Benjamin Glaser and S. Mohadeseh Taheri-Mousavi},
       year={2025},
-      eprint={xxxx.xxxxx},
-      archivePrefix={arXiv},
-      url={https://arxiv.org/abs/xxxx.xxxxx}, 
+      eprint={preprint},
+      archivePrefix={Research Square},
+      url={https://doi.org/10.21203/rs.3.rs-6067058/v1}, 
 }
 ```
 
