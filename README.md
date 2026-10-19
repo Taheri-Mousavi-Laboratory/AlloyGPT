@@ -19,8 +19,6 @@ The [`AlloyGPT_UQ/`](./AlloyGPT_UQ) folder extends AlloyGPT to **uncertainty-awa
 given composition (forward prediction), and to generate compositions that meet targets on these quantities (inverse
 design). The folder contains:
 
-- `0_yield_strength_model.ipynb`: the physics-based yield strength model that supplies the YS labels (the same model
-  used in [Certification-driven uncertainty-aware alloy design](https://github.com/Taheri-Mousavi-Laboratory/Certification-driven-uncertainty-aware-alloy-design))
 - `1_train_AlloyGPT_IN718.ipynb`: training on the IN718 alloy language
 - `2_evaluate_AlloyGPT_IN718.ipynb`: forward prediction, inverse design and the round-trip check
 - `AlloyGPT/`: the source code version used for this work
@@ -68,7 +66,6 @@ ModeShapeDiffusionDesign/
 │
 ├── AlloyGPT_UQ/                                # AlloyGPT-UQ extension for IN718 (see its README)
 │   ├── AlloyGPT/                               # source code version used for AlloyGPT-UQ
-│   ├── 0_yield_strength_model.ipynb
 │   ├── 1_train_AlloyGPT_IN718.ipynb
 │   ├── 2_evaluate_AlloyGPT_IN718.ipynb
 │   ├── README.md
