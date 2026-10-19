@@ -12,6 +12,24 @@ Rapid progress in additive manufacturing of alloys opens opportunities in contro
 
 ![plot](./assets/TOC.svg)
 
+## Update: AlloyGPT-UQ for IN718
+
+The [`AlloyGPT_UQ/`](./AlloyGPT_UQ) folder extends AlloyGPT to **uncertainty-aware prediction and design of IN718
+(Alloy 718)**. The model is trained to predict the **mean, standard deviation and spread of yield strength** for a
+given composition (forward prediction), and to generate compositions that meet targets on these quantities (inverse
+design). The folder contains:
+
+- `0_yield_strength_model.ipynb`: the physics-based yield strength model that supplies the YS labels (the same model
+  used in [Certification-driven uncertainty-aware alloy design](https://github.com/Taheri-Mousavi-Laboratory/Certification-driven-uncertainty-aware-alloy-design))
+- `1_train_AlloyGPT_IN718.ipynb`: training on the IN718 alloy language
+- `2_evaluate_AlloyGPT_IN718.ipynb`: forward prediction, inverse design and the round-trip check
+- `AlloyGPT/`: the source code version used for this work
+
+> [!NOTE]
+> The AlloyGPT-UQ notebooks only show how the code works and its expected output. The data come from Thermo-Calc
+> and **are not provided** under its license. Users with a Thermo-Calc license can generate data in the same format
+> and run the full workflow. See [`AlloyGPT_UQ/README.md`](./AlloyGPT_UQ/README.md) for details and setup.
+
 ## Installation
 
 Create a virtual environment
@@ -48,6 +66,14 @@ ModeShapeDiffusionDesign/
 │   ├── UtilityPack.py
 │   └── TestPack.py
 │
+├── AlloyGPT_UQ/                                # AlloyGPT-UQ extension for IN718 (see its README)
+│   ├── AlloyGPT/                               # source code version used for AlloyGPT-UQ
+│   ├── 0_yield_strength_model.ipynb
+│   ├── 1_train_AlloyGPT_IN718.ipynb
+│   ├── 2_evaluate_AlloyGPT_IN718.ipynb
+│   ├── README.md
+│   └── requirements.txt
+|
 ├── 0_AlloyGPT_Inferring_demo.ipynb             # demo 1: for making inferences
 ├── 1_AlloyGPT_training_demo.ipynb              # demo 2: for training
 │
@@ -89,6 +115,14 @@ Due to the restrictions of [Thermo-Calc EULA](https://thermocalc.com/wp-content/
       eprint={preprint},
       archivePrefix={Research Square},
       url={https://doi.org/10.21203/rs.3.rs-6067058/v1}, 
+}
+@paper{JixuanHasanBoSMohadeseh2026Uncertainty,
+      title={Uncertainty-informed alloy design for additive manufacturing via a multi-functional large language model}, 
+      author={Jixuan Dong, Hasan Al Jame, Bo Ni and S. Mohadeseh Taheri-Mousavi},
+      journal={Additive Manufacturing Letters},
+      year={2026},
+      pages={100422},
+      url={https://doi.org/10.1016/j.addlet.2026.100422}, 
 }
 ```
 
