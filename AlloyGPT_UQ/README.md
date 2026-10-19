@@ -20,16 +20,16 @@ summaries, training log and the example generations printed during training) so 
 
 ## Contents
 
-| | |
+| File | Description |
 |---|---|
-| `0_yield_strength_model.ipynb` | yield strength model as one function, `compute_yield_strength(phase_data, params)`; data loading, plots, optional export of the composition/YS table |
-| `1_train_AlloyGPT_IN718.ipynb` | dataset → sentences → tokens → GPT training (with resume from a checkpoint); includes the original run's outputs |
-| `2_evaluate_AlloyGPT_IN718.ipynb` | loss curves, forward prediction, inverse design, and the round-trip check on the test split |
-| `AlloyGPT/UtilityPack.py` | folder and logging helpers |
-| `AlloyGPT/DataPack_v5.py` | train/valid/test split, record → sentence templates, tokenizer loading and tokenization |
-| `AlloyGPT/ModelPack_v4.py` | GPT model and generation |
-| `AlloyGPT/TrainPack_v3.py` | training loop (gradient accumulation, warm-up + cosine LR, number-token-weighted loss, checkpoints) |
-| `AlloyGPT/TestPack_v3.py` | sentence parsing and test-set helpers (imported by the training notebook) |
+| [`0_yield_strength_model.ipynb`](./0_yield_strength_model.ipynb) | yield strength model as one function, `compute_yield_strength(phase_data, params)`; data loading, plots, optional export of the composition/YS table |
+| [`1_train_AlloyGPT_IN718.ipynb`](./1_train_AlloyGPT_IN718.ipynb) | dataset → sentences → tokens → GPT training (with resume from a checkpoint); includes the original run's outputs |
+| [`2_evaluate_AlloyGPT_IN718.ipynb`](./2_evaluate_AlloyGPT_IN718.ipynb) | loss curves, forward prediction, inverse design, and the round-trip check on the test split |
+| [`AlloyGPT/UtilityPack.py`](./AlloyGPT/UtilityPack.py) | folder and logging helpers |
+| [`AlloyGPT/DataPack_v5.py`](./AlloyGPT/DataPack_v5.py) | train/valid/test split, record → sentence templates, tokenizer loading and tokenization |
+| [`AlloyGPT/ModelPack_v4.py`](./AlloyGPT/ModelPack_v4.py) | GPT model and generation |
+| [`AlloyGPT/TrainPack_v3.py`](./AlloyGPT/TrainPack_v3.py) | training loop (gradient accumulation, warm-up + cosine LR, number-token-weighted loss, checkpoints) |
+| [`AlloyGPT/TestPack_v3.py`](./AlloyGPT/TestPack_v3.py) | sentence parsing and test-set helpers (imported by the training notebook) |
 
 ## Yield strength model
 
