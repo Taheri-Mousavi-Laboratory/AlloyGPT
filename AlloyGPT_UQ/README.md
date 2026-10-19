@@ -150,3 +150,13 @@ Everything the notebooks write (synthetic data, data splits, dataloaders, checkp
 The Thermo-Calc phase-equilibrium data and the derived training data are not included, in accordance with the
 Thermo-Calc software license. Researchers with a Thermo-Calc license can regenerate equivalent inputs in the formats
 described above.
+
+```bibtex
+@paper{JixuanHasanBoSMohadeseh2026Uncertainty,
+      title={Uncertainty-informed alloy design for additive manufacturing via a multi-functional large language model}, 
+      author={Jixuan Dong, Hasan Al Jame, Bo Ni and S. Mohadeseh Taheri-Mousavi},
+      journal={Additive Manufacturing Letters},
+      year={2026},
+      pages={100422},
+      url={https://doi.org/10.1016/j.addlet.2026.100422}, 
+}
