@@ -151,6 +151,8 @@ The Thermo-Calc phase-equilibrium data and the derived training data are not inc
 Thermo-Calc software license. Researchers with a Thermo-Calc license can regenerate equivalent inputs in the formats
 described above.
 
+## Reference
+
 ```bibtex
 @paper{JixuanHasanBoSMohadeseh2026Uncertainty,
       title={Uncertainty-informed alloy design for additive manufacturing via a multi-functional large language model}, 
