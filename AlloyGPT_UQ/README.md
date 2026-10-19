@@ -1,28 +1,33 @@
 # AlloyGPT-UQ for IN718
 
-Source code for the AlloyGPT-UQ workflow on IN718 (Alloy 718):
+Source code for AlloyGPT-UQ: a GPT-style causal language model (AlloyGPT) trained on an "alloy language" for IN718
+(Alloy 718). The same model does **forward prediction** (composition → mean / standard deviation / spread of yield
+strength) and **inverse design** (yield-strength targets → composition).
 
-1. a **physics-based yield strength model** that computes yield strength (YS) from CALPHAD equilibrium phase data and
-   supplies the YS labels, and
-2. a **GPT-style causal language model** (AlloyGPT) trained on an "alloy language" for IN718. The same model does
-   **forward prediction** (composition → mean / standard deviation / spread of yield strength) and **inverse design**
-   (yield-strength targets → composition).
+The yield strength (YS) labels used for training were computed with the physics-based yield strength model from
+[Certification-driven uncertainty-aware alloy design](https://github.com/Taheri-Mousavi-Laboratory/Certification-driven-uncertainty-aware-alloy-design)
+(see [Yield strength labels](#yield-strength-labels)).
 
-## No data or weights
+## About the notebooks and data
 
-The phase-equilibrium data and the training data were generated with Thermo-Calc, and its license does not allow
-redistribution. This repository therefore contains **no dataset files, no tokenizer trained on the data, and no trained
-weights**. It shows how the code works. If you generate comparable data yourself, you can run every step with it.
+> [!IMPORTANT]
+> **The notebooks only show how the code works and what its output looks like.** They are not a way to reproduce
+> the published results from data in this repository, because no data is provided.
 
-The yield strength notebook runs end to end on random placeholder data by default (the numbers it produces have no
-physical meaning). The training notebook is kept with the outputs of the original run (environment check, dataset
-summaries, training log and the example generations printed during training) so readers can see what a run looks like.
+All results in this work come from data computed with **Thermo-Calc**. The Thermo-Calc license does not allow us to
+redistribute that data, so this repository contains **no dataset files, no tokenizer trained on the data, and no
+trained weights**.
+
+Both notebooks keep the outputs of the original runs (environment check, dataset summaries, training log, example
+generations, evaluation plots) so readers can see the expected output. They cannot be re-run without your own data.
+
+**Generating your own data:** anyone with a Thermo-Calc license can compute equivalent data and prepare it in the
+format described in [What you need to provide](#what-you-need-to-provide). With that data, every notebook runs as shown.
 
 ## Contents
 
 | File | Description |
 |---|---|
-| [`0_yield_strength_model.ipynb`](./0_yield_strength_model.ipynb) | yield strength model as one function, `compute_yield_strength(phase_data, params)`; data loading, plots, optional export of the composition/YS table |
 | [`1_train_AlloyGPT_IN718.ipynb`](./1_train_AlloyGPT_IN718.ipynb) | dataset → sentences → tokens → GPT training (with resume from a checkpoint); includes the original run's outputs |
 | [`2_evaluate_AlloyGPT_IN718.ipynb`](./2_evaluate_AlloyGPT_IN718.ipynb) | loss curves, forward prediction, inverse design, and the round-trip check on the test split |
 | [`AlloyGPT/UtilityPack.py`](./AlloyGPT/UtilityPack.py) | folder and logging helpers |
@@ -31,79 +36,13 @@ summaries, training log and the example generations printed during training) so 
 | [`AlloyGPT/TrainPack_v3.py`](./AlloyGPT/TrainPack_v3.py) | training loop (gradient accumulation, warm-up + cosine LR, number-token-weighted loss, checkpoints) |
 | [`AlloyGPT/TestPack_v3.py`](./AlloyGPT/TestPack_v3.py) | sentence parsing and test-set helpers (imported by the training notebook) |
 
-## Yield strength model
+## Yield strength labels
 
-The yield strength model is the same model used in
+The yield strength values behind the training labels (`Mean YS`, `Std YS`, `Delta_YS_expected`) were computed from
+Thermo-Calc equilibrium phase data with the physics-based yield strength model in
 [Certification-driven uncertainty-aware alloy design](https://github.com/Taheri-Mousavi-Laboratory/Certification-driven-uncertainty-aware-alloy-design)
-(`Python_scripts/Yield strength modeling/yield_strength_model.ipynb`). In this repository the whole model is wrapped in
-a single function:
-
-```python
-results = compute_yield_strength(phase_data)                          # default parameters
-results = compute_yield_strength(phase_data, MaterialParams(r_gp=15e-9))  # override any parameter
-```
-
-`results` holds the bulk composition, the γ′ and γ″ volume fractions, each strengthening contribution and the total
-`YS` (MPa) for every configuration.
-
-The yield strength is the sum of four contributions:
-
-$$\sigma_y = \sigma_{\gamma'} + \sigma_{\gamma''} + \sigma_{ss} + \sigma_0$$
-
-| Term | Mechanism |
-|---|---|
-| σ<sub>γ′</sub> | Coherency strengthening by spherical γ′, weakly coupled dislocation pairs |
-| σ<sub>γ″</sub> | Coherency strengthening by disc-shaped γ″, strongly coupled dislocation pairs |
-| σ<sub>ss</sub> | Solid-solution strengthening of the γ matrix (root-sum-square of element contributions) |
-| σ<sub>0</sub> | Constant base term |
-
-Steps for each configuration:
-
-1. **Lattice parameter of each phase** from a Vegard-type mixing rule over its composition, with Ni as the balance element.
-2. **Volume fractions** of γ′ and γ″, converted from CALPHAD phase amounts using molar volumes (4 atoms per cell).
-3. **Interparticle spacing** from the volume fraction and the mean planar precipitate radius, r̄ = √(2/3)·r. For γ″, r is
-   the equivalent radius (a²c)<sup>1/3</sup> of the disc.
-4. **Critical resolved shear stress** for edge and screw dislocations, taking the larger of the two and converting to YS
-   with the Taylor factor M.
-
-The equations are written out in the notebook's Model section.
-
-### Default parameters
-
-| Parameter | Symbol | Value |
-|---|---|---|
-| Shear modulus | G | 75.2 GPa |
-| Burgers vector | b | 0.254 nm |
-| Poisson ratio | ν | 0.33 |
-| Taylor factor | M | 2.6 |
-| γ′ radius | r | 10 nm |
-| γ′ lattice misfit | δ | 0.004 |
-| γ″ disc radius / half-thickness | a / c | 50 nm / 10 nm |
-| γ″ tetragonal misfit | δ″ | 0.0286 |
-| Base strength | σ<sub>0</sub> | 22.34 MPa |
-
-All parameters, including the lattice-parameter and solid-solution coefficients, are fields of `MaterialParams` in the
-notebook.
-
-### Input format
-
-To run on your own Thermo-Calc data, export the equilibrium results as HDF5 files `batchconfig0.hdf5`,
-`batchconfig1.hdf5`, … and set `USE_SYNTHETIC_DATA = False`, `DATA_DIR` and `N_FILES` in the notebook's configuration
-cell. Each file contains the datasets below, one row per alloy configuration; rows from all files are concatenated.
-
-| Key | Shape | Content |
-|---|---|---|
-| `comp` | (n, 7) | Bulk alloy composition, columns `Ni, Cr, Nb, Mo, Ti, Al, Co` (Fe is the balance) |
-| `FCC_1`, `FCC_1_comp` | (n,), (n, 7) | γ matrix: phase amount, phase composition |
-| `FCC_2`, `FCC_2_comp` | (n,), (n, 7) | Candidate γ′ phase |
-| `FCC_3`, `FCC_3_comp` | (n,), (n, 7) | Candidate γ′ phase |
-| `BCT`, `BCT_comp` | (n,), (n, 7) | γ″ phase |
-
-Phase compositions (`*_comp`) use the column order `Fe, Cr, Nb, Mo, Ti, Al, Co`, with Ni taken as the balance. For
-each configuration, γ′ is whichever of `FCC_2` and `FCC_3` has the larger phase amount.
-
-Optional: set `OUTPUT_PATH` (`.csv` or `.arrow`) to save the composition/YS table, and provide
-`data/literature_ys.csv` (one column, `YS_MPa`) to plot a comparison against reported values.
+(`Python_scripts/Yield strength modeling/yield_strength_model.ipynb`). The model itself is not included in this
+repository; see that repository for its code and documentation.
 
 ## AlloyGPT
 
@@ -131,34 +70,33 @@ The GPT model in `AlloyGPT/ModelPack_v4.py` is adapted from [nanoGPT](https://gi
 pip install -r requirements.txt
 ```
 
-Run the notebooks from the repository root, in order:
+Run the notebooks from inside the `AlloyGPT_UQ/` folder, on a CUDA GPU (the training code assumes CUDA):
 
-0. `0_yield_strength_model.ipynb`: runs on CPU. With the default `USE_SYNTHETIC_DATA = True` it writes random HDF5
-   files to `synthetic_data/` and runs the full model on them.
-1. `1_train_AlloyGPT_IN718.ipynb` (CUDA GPU; the training code assumes CUDA): set `CKeys['IF_FirstRun'] = 1` for a new
-   run. **A new run deletes `./training_resu/`.** To resume, set it to `2` and choose `CKeys['Resume_from_where']`.
-   The model is imported as `AlloyGPT.ModelPack_v3`; the version in this repository is `AlloyGPT/ModelPack_v4.py`
-   (same `GPT` model, `generate` can stop at `</s>`), so change that import (and `DataPack_v3` → `DataPack_v5` in the
-   tokenizer check) when you run it.
+1. `1_train_AlloyGPT_IN718.ipynb`: set `CKeys['IF_FirstRun'] = 1` for a new run. **A new run deletes `./training_resu/`.**
+   To resume, set it to `2` and choose `CKeys['Resume_from_where']`. The model is imported as `AlloyGPT.ModelPack_v3`;
+   the version in this repository is `AlloyGPT/ModelPack_v4.py` (same `GPT` model, `generate` can stop at `</s>`), so
+   change that import (and `DataPack_v3` → `DataPack_v5` in the tokenizer check) when you run it.
 2. `2_evaluate_AlloyGPT_IN718.ipynb`: reads `./training_resu/` and writes to `./validation_results/`.
 
-Everything the notebooks write (synthetic data, data splits, dataloaders, checkpoints, predictions) goes to folders that
-`.gitignore` excludes, so a `git add .` will not pick them up.
+Everything the notebooks write (data splits, dataloaders, checkpoints, predictions) goes to folders that `.gitignore`
+excludes, so a `git add .` will not pick them up.
 
 ## Data availability
 
-The Thermo-Calc phase-equilibrium data and the derived training data are not included, in accordance with the
-Thermo-Calc software license. Researchers with a Thermo-Calc license can regenerate equivalent inputs in the formats
-described above.
+The results in this work are based on data computed with Thermo-Calc. In accordance with the Thermo-Calc software
+license, neither the Thermo-Calc data nor the training data derived from it are provided. The notebooks are included
+only to show how the code works and its expected output. Researchers with a Thermo-Calc license can generate data in
+the format described above and run the full workflow with it.
 
 ## Reference
 
 ```bibtex
-@paper{JixuanHasanBoSMohadeseh2026Uncertainty,
-      title={Uncertainty-informed alloy design for additive manufacturing via a multi-functional large language model}, 
-      author={Jixuan Dong, Hasan Al Jame, Bo Ni and S. Mohadeseh Taheri-Mousavi},
+@article{JixuanHasanBoSMohadeseh2026Uncertainty,
+      title={Uncertainty-informed alloy design for additive manufacturing via a multi-functional large language model},
+      author={Jixuan Dong and Hasan Al Jame and Bo Ni and S. Mohadeseh Taheri-Mousavi},
       journal={Additive Manufacturing Letters},
       year={2026},
       pages={100422},
-      url={https://doi.org/10.1016/j.addlet.2026.100422}, 
+      url={https://doi.org/10.1016/j.addlet.2026.100422},
 }
+```
