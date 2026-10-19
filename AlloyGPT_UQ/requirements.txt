@@ -1,0 +1,13 @@
+torch>=2.0
+transformers
+tokenizers
+datasets
+numpy
+pandas
+matplotlib
+seaborn
+h5py
+pyarrow
+scikit-learn
+tqdm
+jupyter
