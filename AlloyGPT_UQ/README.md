@@ -30,11 +30,7 @@ format described in [What you need to provide](#what-you-need-to-provide). With 
 |---|---|
 | [`1_train_AlloyGPT_IN718.ipynb`](./1_train_AlloyGPT_IN718.ipynb) | dataset → sentences → tokens → GPT training (with resume from a checkpoint); includes the original run's outputs |
 | [`2_evaluate_AlloyGPT_IN718.ipynb`](./2_evaluate_AlloyGPT_IN718.ipynb) | loss curves, forward prediction, inverse design, and the round-trip check on the test split |
-| [`AlloyGPT/UtilityPack.py`](./AlloyGPT/UtilityPack.py) | folder and logging helpers |
-| [`AlloyGPT/DataPack_v5.py`](./AlloyGPT/DataPack_v5.py) | train/valid/test split, record → sentence templates, tokenizer loading and tokenization |
-| [`AlloyGPT/ModelPack_v4.py`](./AlloyGPT/ModelPack_v4.py) | GPT model and generation |
-| [`AlloyGPT/TrainPack_v3.py`](./AlloyGPT/TrainPack_v3.py) | training loop (gradient accumulation, warm-up + cosine LR, number-token-weighted loss, checkpoints) |
-| [`AlloyGPT/TestPack_v3.py`](./AlloyGPT/TestPack_v3.py) | sentence parsing and test-set helpers (imported by the training notebook) |
+| [`AlloyGPT_UQ/`](./AlloyGPT_UQ) | source code: data processing, GPT model, training loop, testing and utility functions |
 
 ## Yield strength labels
 
@@ -50,7 +46,7 @@ Built on the AlloyGPT code by Bo Ni:
 B. Ni, B. Glaser, S. M. Taheri-Mousavi, "End-to-end prediction and design of additively manufacturable alloys using a
 generative AlloyGPT model", *npj Computational Materials* **11**, 294 (2025). https://doi.org/10.1038/s41524-025-01768-2
 
-The GPT model in `AlloyGPT/ModelPack_v4.py` is adapted from [nanoGPT](https://github.com/karpathy/nanoGPT)
+The GPT model in `AlloyGPT_UQ/ModelPack_UQ.py` is adapted from [nanoGPT](https://github.com/karpathy/nanoGPT)
 (Andrej Karpathy, MIT License).
 
 ### What you need to provide
@@ -64,18 +60,30 @@ The GPT model in `AlloyGPT/ModelPack_v4.py` is adapted from [nanoGPT](https://gi
    `DataPack.build_tokenizer`, with `</s>` as token id 0). The loss weighting expects the number characters
    `0-9 . + - e` to be single tokens.
 
-## Running
+## Installation
 
+Clone the repository using `git`:
+```bash
+git clone https://github.com/Taheri-Mousavi-Laboratory/AlloyGPT.git
+cd AlloyGPT
 ```
+
+Create a virtual environment
+```bash
+conda env create --prefix=./AlloyGPT_env --file=AlloyGPT_env_environment.yml
+conda activate ./AlloyGPT_env
+```
+
+Then, install:
+```bash
+cd AlloyGPT_UQ
 pip install -r requirements.txt
 ```
 
 Run the notebooks from inside the `AlloyGPT_UQ/` folder, on a CUDA GPU (the training code assumes CUDA):
 
 1. `1_train_AlloyGPT_IN718.ipynb`: set `CKeys['IF_FirstRun'] = 1` for a new run. **A new run deletes `./training_resu/`.**
-   To resume, set it to `2` and choose `CKeys['Resume_from_where']`. The model is imported as `AlloyGPT.ModelPack_v3`;
-   the version in this repository is `AlloyGPT/ModelPack_v4.py` (same `GPT` model, `generate` can stop at `</s>`), so
-   change that import (and `DataPack_v3` → `DataPack_v5` in the tokenizer check) when you run it.
+   To resume, set it to `2` and choose `CKeys['Resume_from_where']`.
 2. `2_evaluate_AlloyGPT_IN718.ipynb`: reads `./training_resu/` and writes to `./validation_results/`.
 
 Everything the notebooks write (data splits, dataloaders, checkpoints, predictions) goes to folders that `.gitignore`
